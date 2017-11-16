@@ -76,21 +76,19 @@ sfSprite *reverse_bird(sfSprite *bird, sfIntRect rect)
 	return (bird);
 }
 
-void get_clicked(sfSprite *(*bird),sfVector2f *origin, sfEvent event, float *rand_y, sfVector2f *move, sfRenderWindow *window, sfIntRect rect)
+void get_clicked(sfSprite *(*bird),sfVector2f *origin, sfEvent event, float *rand_y, float *movex, sfVector2f *move)
 {
 	if (event.mouseButton.x >= sfSprite_getPosition(*bird).x && event.mouseButton.x <= (sfSprite_getPosition(*bird).x + 110) &&
 event.mouseButton.y >= sfSprite_getPosition(*bird).y && event.mouseButton.y <= (sfSprite_getPosition(*bird).y + 110)) {
 		sfSprite_setPosition(*bird, *origin);
 		*rand_y = randomy();
 		(*origin).y = *rand_y;
-		*bird = create_bird(*bird, rect);
-		sfSprite_setTextureRect(*bird, rect);
-		sfRenderWindow_drawSprite(window, *bird, NULL);
-		sfSprite_setPosition(*bird, *origin);
+		*movex = *movex + 0.1;
+		(*move).x = *movex;
 	}
 }
 
-void events(sfRenderWindow *window, sfSprite *(*bird), sfVector2f *origin, float *rand_y, sfVector2f *move, sfIntRect rect)
+void events(sfRenderWindow *window, sfSprite *(*bird), sfVector2f *origin, float *rand_y, float *movex, sfVector2f *move)
 {
 	sfEvent event;
 
@@ -99,7 +97,7 @@ void events(sfRenderWindow *window, sfSprite *(*bird), sfVector2f *origin, float
 			sfRenderWindow_close(window);
 		if (event.type == sfEvtMouseButtonPressed) {
 			if (event.mouseButton.button == sfMouseLeft) {
-				get_clicked(bird, origin, event, rand_y, move, window, rect);
+				get_clicked(bird, origin, event, rand_y, movex, move);
 			}
 		}
 	}
@@ -155,9 +153,10 @@ int my_hunter(sfIntRect rect)
 		sfSprite_move(bird, move);
 		bird_flip(&bird, rect, window, rand_y, origin);
 		bird_move(&bird, &move, movex);
-		events(window, &bird, &origin, &rand_y, &move, rect);
+		events(window, &bird, &origin, &rand_y, &movex, &move);
 	}
 	sfSprite_destroy(background);
+	//sfTexture_destroy(texture);
 	sfRenderWindow_destroy(window);
 	return (0);
 }
