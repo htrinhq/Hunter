@@ -143,19 +143,6 @@ void get_clicked(sfSprite *(*bird),sfVector2f *origin, sfEvent event, float *ran
 	}
 }
 
-void overmenu(sfRenderWindow *window, sfIntRect rect, sfIntRect liferect)
-{
-	sfEvent event;
-
-	while (sfRenderWindow_pollEvent(window, &event)) {
-		if (event.type == sfEvtClosed)
-			sfRenderWindow_close(window);
-		if (event.type == sfEvtKeyPressed) {
-			if (sfEvtKeyPressed == sfKeyReturn)
-				my_hunter(rect, liferect);
-		}
-	}
-}
 
 void events(sfRenderWindow *window, sfSprite *(*bird), sfVector2f *origin, float *rand_y, float *movex, sfVector2f *move, sfIntRect rect, sfMusic *shoot, sfMusic *duck, sfIntRect *liferect, int *shot, int *miss)
 {
@@ -213,30 +200,6 @@ void destroy(sfMusic *shoot, sfMusic *duck, sfMusic *tetris, sfSprite *backgroun
 	sfRenderWindow_destroy(window);
 }
 
-void gomenu(sfRenderWindow *window, int *try, sfFont *font, sfIntRect rect, sfIntRect liferect)
-{
-	sfText *game_over;
-	sfText *try_again;
-	sfVector2f middle = {340, 250};
-	sfVector2f tryagain = {150, 350};
-	game_over = sfText_create();
-	try_again = sfText_create();
-
-	*try = *try + 1;
-	sfText_setString(game_over, "GAME OVER");
-	if (*try >= 100)
-		sfText_setString(try_again, "Press Enter to Try Again");
-	sfText_setFont(game_over, font);
-	sfText_setFont(try_again, font);
-	sfText_setCharacterSize(game_over, 80);
-	sfText_setCharacterSize(try_again, 50);
-	sfText_setPosition(game_over, middle);
-	sfText_setPosition(try_again, tryagain);
-	sfRenderWindow_drawText(window, game_over, NULL);
-	sfRenderWindow_drawText(window, try_again, NULL);
-	sfRenderWindow_display(window);
-	overmenu(window, rect, liferect);
-}
 
 void displayscore(sfRenderWindow *window, sfFont *font)
 {
@@ -251,6 +214,50 @@ void displayscore(sfRenderWindow *window, sfFont *font)
 	sfRenderWindow_drawText(window, tscore, NULL);
 }
 
+void overmenu(sfRenderWindow *window, sfIntRect rect, sfIntRect liferect, sfSprite *heart, sfFont *font, sfSprite *background)
+{
+	sfEvent event;
+
+	while (sfRenderWindow_pollEvent(window, &event)) {
+		if (event.type == sfEvtClosed)
+		sfRenderWindow_close(window);
+		if (event.type == sfEvtKeyPressed) {
+			if (sfKeyboard_isKeyPressed(sfKeyReturn)) {
+				sfRenderWindow_drawSprite(window, background, NULL);
+				sfRenderWindow_drawSprite(window, heart, NULL);
+				sfSprite_setTextureRect(heart, liferect);
+				displayscore(window, font);
+				sfRenderWindow_display(window);
+			}
+		}
+	}
+}
+
+void gomenu(sfRenderWindow *window, int *try, sfFont *font, sfIntRect rect, sfIntRect liferect, sfSprite *heart, sfSprite *background)
+{
+	sfText *game_over;
+	sfText *try_again;
+	sfVector2f middle = {340, 250};
+	sfVector2f tryagain = {150, 350};
+	game_over = sfText_create();
+	try_again = sfText_create();
+
+	*try = *try + 1;
+	sfText_setString(game_over, "GAME OVER");
+	if (*try >= 100)
+	sfText_setString(try_again, "Press Enter to Try Again");
+	sfText_setFont(game_over, font);
+	sfText_setFont(try_again, font);
+	sfText_setCharacterSize(game_over, 80);
+	sfText_setCharacterSize(try_again, 50);
+	sfText_setPosition(game_over, middle);
+	sfText_setPosition(try_again, tryagain);
+	sfRenderWindow_drawText(window, game_over, NULL);
+	sfRenderWindow_drawText(window, try_again, NULL);
+	sfRenderWindow_display(window);
+	overmenu(window, rect, liferect, heart, font, background);
+}
+
 int my_hunter(sfIntRect rect, sfIntRect liferect)
 {
 	int try = 0;
@@ -260,8 +267,7 @@ int my_hunter(sfIntRect rect, sfIntRect liferect)
 	int offset = 0;
 	float movex = 0.4;
 	float rand_y = randomy();
-	sfFont *font;
-	font = sfFont_createFromFile("game_over.ttf");
+	sfFont *font = sfFont_createFromFile("game_over.ttf");
 	sfVector2f move = {movex, 0};
 	sfVector2f mouse;
 	sfVector2f origin = {-110, rand_y};
@@ -296,7 +302,7 @@ int my_hunter(sfIntRect rect, sfIntRect liferect)
 			sfRenderWindow_display(window);
 		} else {
 			sfMusic_stop(tetris);
-			gomenu(window, &try, font, rect, liferect);
+			gomenu(window, &try, font, rect, liferect, heart, background);
 			if (try >= 200)
 				try = 0;
 		}
