@@ -5,7 +5,7 @@
 ##
 ##
 
-SRC	=	my_hunter.c
+SRC	=	source/my_hunter.c
 
 OBJ	=	$(SRC:.c=.o)
 
