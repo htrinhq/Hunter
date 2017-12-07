@@ -18,6 +18,8 @@ LDFLAGS	=	-l c_graph_prog
 $(NAME):	$(OBJ)
 	gcc -o $(NAME) $(OBJ) $(LDFLAGS)
 
+all:	$(NAME)
+
 clean:
 	rm -f $(OBJ)
 
