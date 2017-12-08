@@ -5,7 +5,9 @@
 ##
 ##
 
-SRC	=	source/my_hunter.c
+SRC	=	source/my_hunter.c	\
+		source/window.c	\
+		source/sprites.c
 
 OBJ	=	$(SRC:.c=.o)
 
