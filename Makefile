@@ -7,7 +7,12 @@
 
 SRC	=	source/my_hunter.c	\
 		source/window.c	\
-		source/sprites.c
+		source/sprites.c	\
+		source/bird.c	\
+		source/event.c	\
+		source/game_over.c	\
+		source/fill_struct.c	\
+		source/main.c
 
 OBJ	=	$(SRC:.c=.o)
 

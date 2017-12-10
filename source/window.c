@@ -40,23 +40,21 @@ sfSprite *create_background(svt_t *media)
 	return (media->sprite);
 }
 
-void move_liferect(sfIntRect *liferect)
+void move_liferect(math_t *math)
 {
-	if ((*liferect).left == 0 || (*liferect).left == 60)
-	 	(*liferect).left = (*liferect).left + 60;
-	//else if ((*liferect).left == 120)
-	//	(*liferect).left == 0;
+	if (((*math).liferect).left == 0 || ((*math).liferect).left == 60)
+	 	((*math).liferect).left = ((*math).liferect).left + 60;
 }
 
-void move_rect(sfIntRect *rect, math_t *math, int max_value)
+void move_rect(math_t *math, int max_value)
 {
 	math->offset = math->offset + 1;
 	if (math->offset == 80)
-		(*rect).left = 110;
+		((*math).rect).left = 110;
 	if (math->offset == 160)
-	 	(*rect).left = 220;
+	 	((*math).rect).left = 220;
 	if (math->offset == max_value) {
-		(*rect).left = 0;
+		((*math).rect).left = 0;
 		math->offset = 0;
 	}
 }
